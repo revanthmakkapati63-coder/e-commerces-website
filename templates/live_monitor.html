@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Live Monitor{% endblock %}
+{% block content %}
+<h2>Live Monitor</h2>
+<table class="table table-striped">
+  <thead><tr><th>Time</th><th>IP</th><th>Page</th><th>Payload</th><th>Attack Type</th></tr></thead>
+  <tbody>
+  {% for row in rows %}
+    <tr>
+      <td>{{ row.timestamp }}</td>
+      <td>{{ row.ip_address }}</td>
+      <td>{{ row.page_name }}</td>
+      <td>{{ row.user_input|e }}</td>
+      <td>{{ row.attack_type }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "admin/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row mb-4">
+  <div class="col-md-3"><div class="card text-white bg-primary mb-3"><div class="card-header">Total Requests</div><div class="card-body"><h4>{{ total }}</h4></div></div></div>
+  <div class="col-md-3"><div class="card text-white bg-success mb-3"><div class="card-header">Clean Requests</div><div class="card-body"><h4>{{ clean }}</h4></div></div></div>
+  <div class="col-md-3"><div class="card text-white bg-danger mb-3"><div class="card-header">Blocked</div><div class="card-body"><h4>{{ blocked }}</h4></div></div></div>
+  <div class="col-md-3"><div class="card text-white bg-warning mb-3"><div class="card-header">SQL Injection</div><div class="card-body"><h4>{{ sql_inj }}</h4></div></div></div>
+  <div class="col-md-3"><div class="card text-white bg-info mb-3"><div class="card-header">XSS</div><div class="card-body"><h4>{{ xss }}</h4></div></div></div>
+  <div class="col-md-3"><div class="card text-white bg-secondary mb-3"><div class="card-header">Other Attacks</div><div class="card-body"><h4>{{ other }}</h4></div></div></div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Attack Distribution</div>
+      <div class="card-body">
+        <canvas id="attackChart" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Requests Over Time (24h)</div>
+      <div class="card-body">
+        <canvas id="timelineChart" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Recent Blocked Attacks</div>
+      <div class="card-body p-0">
+        <table class="table mb-0">
+          <thead><tr><th>Time</th><th>IP</th><th>Page</th><th>Type</th><th></th></tr></thead>
+          <tbody>
+            {% for r in recent %}
+            <tr>
+              <td>{{ r.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+              <td>{{ r.ip_address }}</td>
+              <td>{{ r.page }}</td>
+              <td><span class="badge bg-{{ 'danger' if r.attack_type=='SQL Injection' else 'warning' if r.attack_type=='XSS' else 'secondary' }}">{{ r.attack_type }}</span></td>
+              <td><a href="{{ url_for('admin.blocked_detail', req_id=r.id) }}" class="btn btn-sm btn-outline-primary">Details</a></td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="text-center">No blocked requests</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Top Attacking IPs</div>
+      <div class="card-body p-0">
+        <table class="table mb-0">
+          <thead><tr><th>IP</th><th>Count</th></tr></thead>
+          <tbody>
+            {% for ip, cnt in top_ips %}
+            <tr><td>{{ ip }}</td><td>{{ cnt }}</td></tr>
+            {% else %}
+            <tr><td colspan="2" class="text-center">None</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Attack Distribution Chart
+  const attackCtx = document.getElementById('attackChart').getContext('2d');
+  new Chart(attackCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['SQL Injection', 'XSS', 'Other'],
+      datasets: [{
+        data: [{{ sql_inj }}, {{ xss }}, {{ other }}],
+        backgroundColor: ['#dc3545', '#ffc107', '#6c757d'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+
+  // Timeline Chart - fetch from API
+  fetch('{{ url_for('admin.api_stats') }}')
+    .then(res => res.json())
+    .then(data => {
+      const labels = Object.keys(data).sort();
+      const values = labels.map(k => data[k]);
+      const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+      new Chart(timelineCtx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Blocked Attacks',
+            data: values,
+            borderColor: '#dc3545',
+            backgroundColor: 'rgba(220,53,69,0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+          plugins: { legend: { display: false } }
+        }
+      });
+    });
+});
+</script>
+{% endblock %}

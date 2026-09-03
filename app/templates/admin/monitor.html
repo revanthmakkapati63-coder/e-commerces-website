@@ -1,0 +1,50 @@
+{% extends "admin/base.html" %}
+{% block title %}Live Attack Monitor{% endblock %}
+{% block content %}
+<h2>Live Attack Monitor</h2>
+<table class="table table-striped">
+  <thead>
+    <tr><th>Date & Time</th><th>IP Address</th><th>Page</th><th>Payload</th><th>Attack Type</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+    {% for a in attacks.items %}
+    <tr>
+      <td>{{ a.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      <td>{{ a.ip_address }}</td>
+      <td>{{ a.page }}</td>
+      <td><code>{{ a.payload[:200] }}</code></td>
+      <td><span class="badge bg-{{ 'danger' if a.attack_type=='SQL Injection' else 'warning' if a.attack_type=='XSS' else 'secondary' }}">{{ a.attack_type }}</span></td>
+      <td><span class="badge bg-success">Blocked</span></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="text-center">No attacks recorded</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<nav>
+  <ul class="pagination justify-content-center">
+    {% if attacks.has_prev %}
+      <li class="page-item"><a class="page-link" href="{{ url_for('admin.monitor', page=attacks.prev_num) }}">Previous</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+    {% for p in attacks.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+      {% if p %}
+        {% if p == attacks.page %}
+          <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('admin.monitor', page=p) }}">{{ p }}</a></li>
+        {% endif %}
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">…</span></li>
+      {% endif %}
+    {% endfor %}
+    {% if attacks.has_next %}
+      <li class="page-item"><a class="page-link" href="{{ url_for('admin.monitor', page=attacks.next_num) }}">Next</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}

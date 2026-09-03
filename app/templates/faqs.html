@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}FAQs - ShopNest{% endblock %}
+{% block content %}
+
+<!-- ==== FAQ SECTION ==== -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row justify-content-center mb-5">
+      <div class="col-md-8 text-center">
+        <h2 class="fw-bold mb-4">Frequently Asked Questions</h2>
+        <p class="text-muted mb-4">Find answers to common questions about orders, payments, shipping, and more.</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Order Questions -->
+      <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title fw-bold mb-3">Orders</h5>
+            <div class="accordion" id="orderAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#orderQ1" aria-expanded="false" aria-controls="orderQ1">
+                    How do I place an order?
+                  </button>
+                </h2>
+                <div id="orderQ1" class="accordion-collapse collapse" aria-labelledby="orderQ1" data-bs-parent="#orderAccordion">
+                  <div class="accordion-body">
+                    Browse products, add items to your cart, and proceed to checkout. You'll need to create an account or log in to complete your purchase.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#orderQ2" aria-expanded="false" aria-controls="orderQ2">
+                    How can I track my order?
+                  </button>
+                </h2>
+                <div id="orderQ2" class="accordion-collapse collapse" aria-labelledby="orderQ2" data-bs-parent="#orderAccordion">
+                  <div class="accordion-body">
+                    Once shipped, you'll receive a tracking number via email. You can also track your orders in your account dashboard.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#orderQ3" aria-expanded="false" aria-controls="orderQ3">
+                    What if I need to cancel or modify my order?
+                  </button>
+                </h2>
+                <div id="orderQ3" class="accordion-collapse collapse" aria-labelledby="orderQ3" data-bs-parent="#orderAccordion">
+                  <div class="accordion-body">
+                    Contact us within 24 hours of ordering. Once shipped, cancellations may not be possible, but returns are accepted per our policy.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment & Shipping -->
+      <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title fw-bold mb-3">Payment & Shipping</h5>
+            <div class="accordion" id="paymentAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentQ1" aria-expanded="false" aria-controls="paymentQ1">
+                    What payment methods do you accept?
+                  </button>
+                </h2>
+                <div id="paymentQ1" class="accordion-collapse collapse" aria-labelledby="paymentQ1" data-bs-parent="#paymentAccordion">
+                  <div class="accordion-body">
+                    We accept major credit cards (Visa, MasterCard, American Express), UPI, net banking, and popular digital wallets.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentQ2" aria-expanded="false" aria-controls="paymentQ2">
+                    How much is shipping?
+                  </button>
+                </h2>
+                <div id="paymentQ2" class="accordion-collapse collapse" aria-labelledby="paymentQ2" data-bs-parent="#paymentAccordion">
+                  <div class="accordion-body">
+                    Shipping fees depend on your location and order value. Free shipping is available on orders above ₹X. Check your cart for exact amounts.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentQ3" aria-expanded="false" aria-controls="paymentQ3">
+                    Do you ship internationally?
+                  </button>
+                </h2>
+                <div id="paymentQ3" class="accordion-collapse collapse" aria-labelledby="paymentQ3" data-bs-parent="#paymentAccordion">
+                  <div class="accordion-body">
+                    Currently we ship within India. International shipping may be available in the future - check our website for updates.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==== SUPPORT CONTACT ==== -->
+<section class="py-5 border-top border-bottom">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h3 class="fw-bold mb-3">Need More Help?</h3>
+        <p class="text-muted">Our support team is here to help! Contact us via:</p>
+        <ul class="list-unstyled small">
+          <li><i class="bi bi-envelope me-2"></i> support@example.com</li>
+          <li><i class="bi bi-phone me-2"></i> +1 (800) 555-0199</li>
+          <li><i class="bi bi-chat me-2"></i> Live Chat: Available 24/7</li>
+        </ul>
+      </div>
+      <div class="col-md-6 text-center">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h6 class="mb-3">Quick Contact</h6>
+          <form>
+            <div class="mb-2">
+              <input type="text" class="form-control" placeholder="Your name" required>
+            </div>
+            <div class="mb-2">
+              <input type="email" class="form-control" placeholder="Your email" required>
+            </div>
+            <div class="mb-2">
+              <select class="form-select">
+                <option>Select query type</option>
+                <option>Order issue</option>
+                <option>Product question</option>
+                <option>Return & Refund</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <textarea class="form-control" rows="3" placeholder="Describe your issue"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "admin/base.html" %}
+{% block title %}Validation Rules{% endblock %}
+{% block content %}
+<h2>Validation Rules</h2>
+<form method="POST" class="card card-body mb-4">
+  {{ form.hidden_tag() }}
+  <div class="row g-3">
+    <div class="col-md-3">{{ form.name.label(class="form-label") }}{{ form.name(class="form-control") }}</div>
+    <div class="col-md-3">{{ form.field.label(class="form-label") }}{{ form.field(class="form-control", placeholder="*") }}</div>
+    <div class="col-md-3">{{ form.rule_type.label(class="form-label") }}{{ form.rule_type(class="form-select") }}</div>
+    <div class="col-md-3">{{ form.active.label(class="form-check-label") }} {{ form.active(class="form-check-input") }}</div>
+    <div class="col-12">{{ form.pattern.label(class="form-label") }}{{ form.pattern(class="form-control", rows=2) }}</div>
+    <div class="col-12">{{ form.submit(class="btn btn-primary") }}</div>
+  </div>
+</form>
+
+<table class="table table-striped">
+  <thead><tr><th>Name</th><th>Field</th><th>Type</th><th>Pattern</th><th>Active</th><th></th></tr></thead>
+  <tbody>
+    {% for r in rules %}
+    <tr>
+      <td>{{ r.name }}</td>
+      <td>{{ r.field }}</td>
+      <td>{{ r.rule_type }}</td>
+      <td><code>{{ r.pattern }}</code></td>
+      <td>{{ 'Yes' if r.active else 'No' }}</td>
+      <td>
+        <form method="POST" action="{{ url_for('admin.delete_rule', rule_id=r.id) }}" onsubmit="return confirm('Delete rule?')">
+          <button class="btn btn-sm btn-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="text-center">No rules defined</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Reviews for {{ product.name }}</h2>
+{% if reviews %}
+  {% for r in reviews %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ r.author.username }} <small class="text-muted">{{ r.created_at.strftime('%Y-%m-%d') }}</small></h5>
+        <p class="card-text"><strong>Rating:</strong> {{ r.rating }}/5</p>
+        <p class="card-text">{{ r.comment }}</p>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p class="text-muted">No reviews yet.</p>
+{% endif %}
+<a href="{{ url_for('main.product_detail', product_id=product.id) }}" class="btn btn-secondary">&larr; Back to Product</a>
+{% endblock %}

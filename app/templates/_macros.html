@@ -1,0 +1,33 @@
+{% macro render_product_card(product, show_deal=False) %}
+<div class="col">
+  <div class="card h-100 shadow-sm product-card position-relative">
+    {% if show_deal and product.discount and product.discount > 0 %}
+      <span class="badge bg-danger position-absolute top-0 start-0 m-2">{{ product.discount }}% OFF</span>
+    {% endif %}
+    {% if product.image_url %}
+      <img src="{{ product.image_url }}" class="card-img-top product-card-img" alt="{{ product.name }}" loading="lazy">
+    {% else %}
+      <div class="card-img-top product-img-fallback product-img-fallback" data-product-name="{{ product.name }}" style="height:200px;">
+        <!-- Fallback will show product name via CSS ::after -->
+      </div>
+    {% endif %}
+    <div class="card-body d-flex flex-column">
+      <h6 class="card-title mb-1">{{ product.name }}</h6>
+      <!-- Rating stars (static 4.5 for demo) -->
+      <div class="text-warning mb-1 small">
+        {% for _ in range(4) %}<i class="bi bi-star-fill"></i>{% endfor %}
+        <i class="bi bi-star-half"></i>
+        <span class="text-muted ms-1">(12)</span>
+      </div>
+      <p class="card-text text-truncate small text-muted flex-grow-1">{{ product.description[:90] }}…</p>
+      <div class="d-flex align-items-center gap-2 mt-auto">
+        <span class="fw-bold text-danger fs-5">${{ "%.2f"|format(product.price) }}</span>
+        {% if product.discount and product.discount > 0 %}
+          <span class="text-muted text-decoration-line-through small">${{ "%.2f"|format(product.price * (1 + product.discount/100)) }}</span>
+        {% endif %}
+      </div>
+      <a href="{{ url_for('main.product_detail', product_id=product.id) }}" class="btn btn-primary btn-sm w-100 mt-2 rounded-pill">View Details</a>
+    </div>
+  </div>
+</div>
+{% endmacro %}

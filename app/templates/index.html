@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% from "_macros.html" import render_product_card %}
+
+{% block content %}
+
+<!-- ==== HERO CAROUSEL ==== -->
+<div id="heroCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="5000">
+  <div class="carousel-inner rounded-3 overflow-hidden">
+    <div class="carousel-item active">
+      <img src="https://via.placeholder.com/1200x350/2874f0/ffffff?text=Big+Sale+Today" class="d-block w-100" alt="Promo 1">
+    </div>
+    <div class="carousel-item">
+      <img src="https://via.placeholder.com/1200x350/ff6f61/ffffff?text=Electronics+Up+to+50%25+Off" class="d-block w-100" alt="Promo 2">
+    </div>
+    <div class="carousel-item">
+      <img src="https://via.placeholder.com/1200x350/00bfa5/ffffff?text=Fashion+New+Arrivals" class="d-block w-100" alt="Promo 3">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+  <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+</div>
+
+<!-- ==== CATEGORY CHIPS ==== -->
+<div class="category-chips mb-4 overflow-auto pb-2" style="scrollbar-width:thin;">
+  <div class="d-flex gap-2 flex-nowrap px-2">
+    {% for cat,label in [('electronics','Electronics'),('fashion','Fashion'),('home','Home & Kitchen'),('beauty','Beauty'),('sports','Sports'),('books','Books'),('toys','Toys'),('grocery','Grocery')] %}
+      <a href="{{ url_for('main.search', query=cat) }}" class="chip btn btn-light btn-sm px-3 py-1 fw-medium">{{ label }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ==== TODAY'S DEALS ==== -->
+<section class="mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0"><i class="bi bi-lightning-charge-fill text-warning me-1"></i>Today's Deals</h4>
+    <div id="dealCountdown" class="text-danger fw-bold fs-5" data-end="1760000000"></div>
+  </div>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3" id="dealsGrid">
+    {% for product in products.items[:8] %}
+      {{ render_product_card(product, show_deal=True) }}
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ==== ALL PRODUCTS (paginated) ==== -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="mb-0">All Products</h4>
+  <form method="GET" action="{{ url_for('main.search') }}" class="d-inline">
+    {{ form.hidden_tag() }}
+    <div class="input-group input-group-sm" style="width:260px;">
+      {{ form.query(class="form-control", placeholder="Search…") }}
+      <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+    </div>
+  </form>
+</div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+  {% for product in products.items %}
+    {{ render_product_card(product) }}
+  {% else %}
+    <div class="col-12 text-center py-5">No products found.</div>
+  {% endfor %}
+</div>
+
+<!-- Pagination -->
+<nav>
+  <ul class="pagination justify-content-center">
+    {% if products.has_prev %}
+      <li class="page-item"><a class="page-link" href="{{ url_for('main.index', page=products.prev_num) }}">Previous</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+    {% for p in products.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+      {% if p %}
+        {% if p == products.page %}
+          <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('main.index', page=p) }}">{{ p }}</a></li>
+        {% endif %}
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">…</span></li>
+      {% endif %}
+    {% endfor %}
+    {% if products.has_next %}
+      <li class="page-item"><a class="page-link" href="{{ url_for('main.index', page=products.next_num) }}">Next</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
+{% endblock %}

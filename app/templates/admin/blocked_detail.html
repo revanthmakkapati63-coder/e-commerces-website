@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+{% block title %}Blocked Request Detail{% endblock %}
+{% block content %}
+<h2>Blocked Request #{{ br.id }}</h2>
+<dl class="row">
+  <dt class="col-sm-3">Timestamp</dt><dd class="col-sm-9">{{ br.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</dd>
+  <dt class="col-sm-3">IP Address</dt><dd class="col-sm-9">{{ br.ip_address }}</dd>
+  <dt class="col-sm-3">Page</dt><dd class="col-sm-9">{{ br.page }}</dd>
+  <dt class="col-sm-3">Attack Type</dt><dd class="col-sm-9"><span class="badge bg-{{ 'danger' if br.attack_type=='SQL Injection' else 'warning' if br.attack_type=='XSS' else 'secondary' }}">{{ br.attack_type }}</span></dd>
+  <dt class="col-sm-3">Reason</dt><dd class="col-sm-9">{{ br.reason }}</dd>
+  <dt class="col-sm-3">Payload</dt><dd class="col-sm-9"><pre><code>{{ br.payload }}</code></pre></dd>
+</dl>
+<a href="{{ url_for('admin.monitor') }}" class="btn btn-secondary">&larr; Back to Monitor</a>
+{% endblock %}

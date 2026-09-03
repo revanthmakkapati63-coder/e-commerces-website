@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_macros.html" import render_product_card %}
+{% block content %}
+<div class="mb-4">
+  <form method="GET" action="{{ url_for('main.search') }}" class="row g-2">
+    {{ form.hidden_tag() }}
+    <div class="col-auto">
+      {{ form.query(class="form-control", placeholder="Search products…", value=query) }}
+    </div>
+    <div class="col-auto">
+      {{ form.submit(class="btn btn-outline-secondary") }}
+    </div>
+  </form>
+</div>
+
+{% if query %}
+  <h4 class="mb-3">Results for “{{ query }}”</h4>
+{% endif %}
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+  {% if products %}
+    {% for product in products %}
+      {{ render_product_card(product) }}
+    {% else %}
+      <div class="col-12 text-center py-5">No products found.</div>
+    {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}
